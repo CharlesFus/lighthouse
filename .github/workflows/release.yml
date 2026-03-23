@@ -10,8 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-    REPO_NAME: ${{ github.repository_owner }}/lighthouse
-    IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/lighthouse
     # Enable self-hosted runners for the sigp repo only.
     SELF_HOSTED_RUNNERS: ${{ github.repository == 'sigp/lighthouse' }}
 
@@ -134,7 +132,13 @@ jobs:
         runs-on: ubuntu-latest
         env:
             VERSION:  ${{ needs.extract-version.outputs.VERSION }}
+            IMAGE_OWNER: ${{ github.repository_owner }}
         steps:
+            - name: Lowercase image owner
+              run: |
+                  echo "IMAGE_OWNER=$(echo $IMAGE_OWNER | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+                  echo "REPO_NAME=$(echo $IMAGE_OWNER | tr '[:upper:]' '[:lower:]')/lighthouse" >> $GITHUB_ENV
+                  echo "IMAGE_NAME=ghcr.io/$(echo $IMAGE_OWNER | tr '[:upper:]' '[:lower:]')/lighthouse" >> $GITHUB_ENV
             # This is necessary for generating the changelog. It has to come before "Download Artifacts" or else it deletes the artifacts.
             - name: Checkout sources
               uses: actions/checkout@v4
