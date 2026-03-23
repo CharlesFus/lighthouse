@@ -300,3 +300,5 @@ incremental = false
 
 [patch.crates-io]
 quick-protobuf = { git = "https://github.com/sigp/quick-protobuf.git", rev = "681f413312404ab6e51f0b46f39b0075c6f4ebfd" }
+yamux = { git = "https://github.com/sigp/rust-yamux", rev = "29efa6aebd4bdfcb16bfb21969ec0c785e570b74" }
+quinn = { git = "https://github.com/sigp/quinn", rev = "59af87979c8411864c1cb68613222f54ed2930a7" }
