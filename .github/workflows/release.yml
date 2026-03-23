@@ -28,7 +28,7 @@ jobs:
             matrix:
                 arch: [aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
-                       x86_64-apple-darwin,
+                       aarch64-apple-darwin,
                        x86_64-windows]
                 include:
                     -   arch: aarch64-unknown-linux-gnu
@@ -37,11 +37,11 @@ jobs:
                     -   arch: x86_64-unknown-linux-gnu
                         runner: ${{ github.repository == 'sigp/lighthouse' && fromJson('["self-hosted", "linux", "release", "large"]') || 'ubuntu-latest'  }}
                         profile: maxperf
-                    -   arch: x86_64-apple-darwin
-                        runner: macos-13
+                    -   arch: aarch64-apple-darwin
+                        runner: macos-14
                         profile: maxperf
                     -   arch: x86_64-windows
-                        runner: ${{ github.repository == 'sigp/lighthouse' && fromJson('["self-hosted", "windows", "release"]') || 'windows-2019'  }}
+                        runner: ${{ github.repository == 'sigp/lighthouse' && fromJson('["self-hosted", "windows", "release"]') || 'windows-2022'  }}
                         profile: maxperf
 
         runs-on:    ${{ matrix.runner }}
@@ -86,8 +86,8 @@ jobs:
               if:  contains(matrix.arch, 'unknown-linux-gnu')
               run: mv target/${{ matrix.arch }}/${{ matrix.profile }}/lighthouse ~/.cargo/bin/lighthouse
 
-            - name: Build Lighthouse for x86_64-apple-darwin
-              if:   matrix.arch == 'x86_64-apple-darwin'
+            - name: Build Lighthouse for aarch64-apple-darwin
+              if:   matrix.arch == 'aarch64-apple-darwin'
               run:  cargo install --path lighthouse --force --locked --features portable,gnosis --profile ${{ matrix.profile }}
 
             - name: Build Lighthouse for Windows
@@ -215,7 +215,7 @@ jobs:
 
                   | System | Architecture | Binary |
                   |:---:|:---:|:---:|
-                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-apple-darwin.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-apple-darwin.tar.gz) |
+                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | aarch64 | [lighthouse-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz) |
                   | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz) |
                   | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz) |
                   | <img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Windows_logo_-_2021_%28Black%29.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-windows.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-windows.tar.gz) |
